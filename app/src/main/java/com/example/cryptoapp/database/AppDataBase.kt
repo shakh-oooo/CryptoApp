@@ -8,20 +8,22 @@ import com.example.cryptoapp.pojo.price.CoinPriceInfo
 
 @Database(entities = [CoinPriceInfo::class], version = 1, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
-    companion object{
+    companion object {
 
-        private var db : AppDataBase? = null
+        private var db: AppDataBase? = null
         private const val NAME_DB = "main.db"
-        private val LOCK =Any()
+        private val LOCK = Any()
 
-        fun getIInstance(context: Context) : AppDataBase{
-            synchronized(LOCK){
+        fun getIInstance(context: Context): AppDataBase {
+            synchronized(LOCK) {
                 db?.let { return it }
-                val instance = Room.databaseBuilder(context,AppDataBase::class.java, NAME_DB).build()
+                val instance =
+                    Room.databaseBuilder(context, AppDataBase::class.java, NAME_DB).build()
                 db = instance
                 return instance
             }
         }
     }
-    abstract fun coinPriceInfoDao():CoinPriceInfoDao
+
+    abstract fun coinPriceInfoDao(): CoinPriceInfoDao
 }

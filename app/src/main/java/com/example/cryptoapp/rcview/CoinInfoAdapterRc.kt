@@ -10,18 +10,18 @@ import com.example.cryptoapp.pojo.price.CoinPriceInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cardview.view.*
 
-class CoinInfoAdapterRc(private val context: Context):RecyclerView.Adapter<CoinInfoAdapterRc.CoinInfoViewHolder>() {
+class CoinInfoAdapterRc(private val context: Context) :
+    RecyclerView.Adapter<CoinInfoAdapterRc.CoinInfoViewHolder>() {
 
-    var coinInfoList : List<CoinPriceInfo> = listOf()
+    var coinInfoList: List<CoinPriceInfo> = listOf()
 
     var onCoinClickListener: OnCoinClickListener? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    set(value){
-        field = value
-        notifyDataSetChanged()
-    }
-
-    inner class CoinInfoViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
+    inner class CoinInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textName = itemView.textName
         var imageView = itemView.imageView
         var textPrice = itemView.textPrice
@@ -30,19 +30,31 @@ class CoinInfoAdapterRc(private val context: Context):RecyclerView.Adapter<CoinI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinInfoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_main,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.activity_main, parent, false)
         return CoinInfoViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CoinInfoViewHolder, position: Int) {
         val coin = coinInfoList[position]
-        holder.textName.text = coin.fromsymbol + " / " + coin.tosymbol
+
+        val symbolsTemplate = context.resources.getString(R.string.symbols_template)
+        val lastUpdateTemplate = context.resources.getString(R.string.last_update_template)
+
+        holder.textName.text = String.format(
+            symbolsTemplate,
+            coin.fromSymbol,
+            coin.tosymbol
+        ) /* coin.fromsymbol + " / " + coin.tosymbol*/
         holder.textPrice.text = coin.price.toString()
-        holder.textTime.text = coin.getFormatDate()
+        holder.textTime.text = String.format(lastUpdateTemplate, coin.getFormatDate())
         Picasso.get().load(coin.imageUrl()).into(holder.imageView)
-       /* itemView.setOnClickListener {
-            onCoinClickListener?.onCoinClick(this)
-        }*/
+
+
+        holder.itemView.setOnClickListener {
+            onCoinClickListener?.onCoinClick(coin)
+            /*при клике на ItemView если слушатель не равен null то у него вызевется метод onCoinClick  */
+        }
     }
 
     override fun getItemCount() = coinInfoList.size

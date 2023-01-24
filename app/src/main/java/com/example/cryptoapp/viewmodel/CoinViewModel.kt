@@ -24,7 +24,7 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
         loadData()
     }
 
-    fun getPriceAboutCoin(fSym : String): LiveData<CoinPriceInfo>{
+    fun getPriceAboutCoin(fSym: String): LiveData<CoinPriceInfo> {
         return db.coinPriceInfoDao().getPriceInfoAboutCoin(fSym)
     }
 
@@ -33,15 +33,15 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
             .map { it.data?.map { it.coinInfo?.name }?.joinToString { "," } }
             .flatMap { ApiFactory.apiService.getFullPriceList(fSyms = it) }
             .map { getPriceInfoRawData(it) }
+            .delaySubscription(10, TimeUnit.SECONDS)
             .repeat()
             .retry()
-            .delaySubscription(10,TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .subscribe({
                 db.coinPriceInfoDao().insertPriceList(it)
-                Log.d("test", "suc$it")
+                Log.d("TEST_OF_LOADING_DATA", "Success: $it")
             }, {
-                Log.d("test", it.message.toString())
+                Log.d("TEST_OF_LOADING_DATA", "Failure: ${it.message}")
             })
         compositeDisposable.add(disposable)
     }
@@ -62,4 +62,10 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
         }
         return result
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
+
 }

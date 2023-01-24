@@ -12,7 +12,7 @@ interface ApiService {
     fun getTopCoinsInfo(
         @Query(QUREY_PARAM_TO_API_KEY) apiKey: String = "",
         @Query(QUREY_PARAM_LIMIT) limit: Int = 10,
-        @Query(QUREY_PARAM_TO_SYMBOL) tsym: String = CURRENCY
+        @Query(QUREY_PARAM_TO_SYMBOL) tSym: String = CURRENCY
     ): Single<CoinInfoListOfData>
 
     @GET("pricemultifull")
@@ -20,7 +20,7 @@ interface ApiService {
         @Query(QUREY_PARAM_TO_API_KEY) apiKey: String = "",
         @Query(QUERY_PARAM_TO_SYMBOLS) tSyms: String = CURRENCY,
         @Query(QUERY_PARAM_FROM_SYMBOLS) fSyms: String,
-    ):Single<CoinPriceInfoRawData>
+    ): Single<CoinPriceInfoRawData>
 
     companion object {
         const val QUREY_PARAM_LIMIT = "limit"
@@ -29,8 +29,8 @@ interface ApiService {
 
         const val CURRENCY = "USD"
 
-        const val QUERY_PARAM_TO_SYMBOLS ="fsyms"
-        const val QUERY_PARAM_FROM_SYMBOLS ="fsyms"
+        const val QUERY_PARAM_TO_SYMBOLS = "tsyms"
+        const val QUERY_PARAM_FROM_SYMBOLS = "fsyms"
 
     }
 

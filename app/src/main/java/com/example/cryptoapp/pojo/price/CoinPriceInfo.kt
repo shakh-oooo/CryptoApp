@@ -19,7 +19,7 @@ data class CoinPriceInfo(
     @PrimaryKey
     @SerializedName("FROMSYMBOL")
     @Expose
-    val fromsymbol: String,
+    val fromSymbol: String,
 
     @SerializedName("TOSYMBOL")
     @Expose
@@ -32,7 +32,7 @@ data class CoinPriceInfo(
     val price: Double? = null,
     @SerializedName("LASTUPDATE")
     @Expose
-    val lastupdate: Long? = null,
+    val lastUpdate: Long? = null,
     @SerializedName("MEDIAN")
     @Expose
     val median: Int? = null,
@@ -155,7 +155,7 @@ data class CoinPriceInfo(
     val imageurl: String?=null
 ){
     fun getFormatDate():String{
-        return time(lastupdate)
+        return time(lastUpdate)
     }
     fun imageUrl():String{
         return BASE_IMAGE_URL + imageurl
